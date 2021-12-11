@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-public class Buyer extends Role{
+public class Buyer extends Role {
     @Id
     private Long id;
 
