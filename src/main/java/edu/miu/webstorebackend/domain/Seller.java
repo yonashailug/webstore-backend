@@ -13,7 +13,7 @@ enum SellerStatus {
 
 @Entity
 @NoArgsConstructor
-public class Seller extends Role {
+public class Seller {
     @Id
     private Long id;
 
