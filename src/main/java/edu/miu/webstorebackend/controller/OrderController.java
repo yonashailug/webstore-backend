@@ -1,7 +1,8 @@
 package edu.miu.webstorebackend.controller;
 
 import edu.miu.webstorebackend.domain.OrderStatus;
-import edu.miu.webstorebackend.dto.OrderDto;
+import edu.miu.webstorebackend.dto.OrderRequestDto;
+import edu.miu.webstorebackend.dto.OrderResponseDto;
 import edu.miu.webstorebackend.dto.OrderStatusResponse;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.order.OrderService;
@@ -22,16 +23,16 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> getAll() {
+    public ResponseEntity<List<OrderResponseDto>> getAll() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
-        List<OrderDto> orderDtos = orderService.getOrdersByUserId(userId);
+        List<OrderResponseDto> orderDtos = orderService.getOrdersByUserId(userId);
         return ResponseEntity.ok(orderDtos);
     }
 
     @PostMapping
-    public ResponseEntity<OrderDto> create(@RequestBody OrderDto orderDto) {
-        Optional<OrderDto> optionalOrderDto = orderService.createOrder(orderDto);
+    public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto orderDto) {
+        Optional<OrderResponseDto> optionalOrderDto = orderService.createOrder(orderDto);
         if(optionalOrderDto.isPresent()) {
             return ResponseEntity.ok(optionalOrderDto.get());
         }
@@ -46,9 +47,9 @@ public class OrderController {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         if(orderService.isOrderBelongToUser(id, userId)) {
-            Optional<OrderDto> optionalOrderDto = orderService.cancelOrder(id);
+            Optional<OrderResponseDto> optionalOrderDto = orderService.cancelOrder(id);
             if (optionalOrderDto.isPresent()) {
-                OrderDto orderDto = optionalOrderDto.get();
+                OrderResponseDto orderDto = optionalOrderDto.get();
                 if(orderDto.getStatus() == OrderStatus.CANCELED) {
                     return ResponseEntity.ok(new OrderStatusResponse("Order Successfully canceled", null));
                 }
@@ -69,9 +70,9 @@ public class OrderController {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         if(orderService.isOrderBelongToUser(id, userId)) {
-            Optional<OrderDto> optionalOrderDto = orderService.changeStatus(status, id);
+            Optional<OrderResponseDto> optionalOrderDto = orderService.changeStatus(status, id);
             if (optionalOrderDto.isPresent()) {
-                OrderDto orderDto = optionalOrderDto.get();
+                OrderResponseDto orderDto = optionalOrderDto.get();
                 if(orderDto.getStatus() == status) {
                     return ResponseEntity.ok(new OrderStatusResponse("Successfully updated to " + status, null));
                 }
