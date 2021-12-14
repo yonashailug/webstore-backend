@@ -5,9 +5,11 @@ import edu.miu.webstorebackend.dto.authDtos.responsedtos.RegistrationResponse;
 import edu.miu.webstorebackend.model.ERole;
 import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.model.User;
+import edu.miu.webstorebackend.security.services.auth.AuthService;
 import edu.miu.webstorebackend.service.RefreshTokenService.RefreshTokenService;
 import edu.miu.webstorebackend.service.RoleService.RoleService;
 import edu.miu.webstorebackend.service.UserService.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,42 +26,18 @@ import java.util.Set;
 @RequestMapping("/api/user/regulate")
 public class UserManagementController {
 
-    private PasswordEncoder encoder;
-    private UserService userService;
-    private RoleService roleService;
+    private AuthService authService;
 
-    public UserManagementController(UserService userService,
-                                    RoleService roleService,
-                                    PasswordEncoder encoder) {
-        this.encoder = encoder;
-        this.userService = userService;
-        this.roleService = roleService;
+    public UserManagementController(AuthService authService) {
+        this.authService = authService;
     }
-
 
     @PostMapping("/admin/register")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RegistrationResponse> registerAdmin(@Valid @RequestBody RegistrationRequest registrationRequest) {
-        if(userService.existsByUsername(registrationRequest.getUsername())) {
-            return ResponseEntity.badRequest()
-                    .body(new RegistrationResponse("Username is already taken"));
-        }
-        if(userService.existsByEmail(registrationRequest.getEmail())) {
-            return ResponseEntity.badRequest()
-                    .body(new RegistrationResponse("The email is already associated with an account"));
-        }
-        Set<Role> roles = new HashSet<Role>();
-        Role r = roleService.findByName(ERole.ADMIN);
-        roles.add(r);
-        User user = new User();
-        user.setUsername(registrationRequest.getUsername());
-        user.setName(registrationRequest.getName());
-        user.setPassword(encoder.encode(registrationRequest.getPassword()));
-        user.setEmail(registrationRequest.getEmail());
-        user.setEnabled(true);
-        user.setRoles(roles);
-        userService.addUser(user);
-
-        return ResponseEntity.ok().body(new RegistrationResponse("Admin Registered Successfully"));
+        var sellerRegistrationEntry = authService.registerUser(registrationRequest, ERole.SELLER, false);
+        HttpStatus status = sellerRegistrationEntry.getKey() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        RegistrationResponse response = sellerRegistrationEntry.getValue();
+        return new ResponseEntity(response, status);
     }
 }
