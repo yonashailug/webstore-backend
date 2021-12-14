@@ -11,4 +11,5 @@ public interface FollowService {
     Optional<FollowDto> getById(Long id);
     Optional<FollowDto> save(FollowDto followDto);
     Optional<FollowDto> delete(Long id);
+    Optional<FollowDto> deleteByIds(Long id, Long sellerId);
 }

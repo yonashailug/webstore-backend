@@ -45,8 +45,6 @@ public class FollowController {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         followDto.setBuyerId(userId);
-        followDto.setDate(LocalDateTime.now());
-
         Optional<FollowDto> optional = followService.save(followDto);
 
         if (optional.isPresent()) {
@@ -58,6 +56,17 @@ public class FollowController {
     @DeleteMapping("{id}")
     ResponseEntity<FollowDto> unfollow(@PathVariable Long id) {
         Optional<FollowDto> optional = followService.delete(id);
+        if(optional.isPresent()) {
+            return ResponseEntity.ok(optional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/unfollow")
+    ResponseEntity<FollowDto> unfollow(@RequestBody FollowDto dto) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        Optional<FollowDto> optional = followService.deleteByIds(userId, dto.getSellerId());
         if(optional.isPresent()) {
             return ResponseEntity.ok(optional.get());
         }

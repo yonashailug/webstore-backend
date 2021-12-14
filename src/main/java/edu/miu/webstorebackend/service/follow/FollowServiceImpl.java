@@ -78,4 +78,10 @@ public class FollowServiceImpl implements FollowService{
         follow.setSeller(userRepository.getById(dto.getSellerId()));
         return follow;
     }
+
+    @Override
+    public Optional<FollowDto> deleteByIds(Long id, Long sellerId) {
+        followRepository.deleteFollowByBuyerAndSellerById(id, sellerId);
+        return Optional.empty();
+    }
 }
