@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class FollowController {
     private final FollowService followService;
 
     @GetMapping
-    @PreAuthorize("hasRole('Buyer')")
+    //@PreAuthorize("hasRole('Buyer')")
     ResponseEntity<List<UserDto>> getFollowing() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -41,7 +42,13 @@ public class FollowController {
 
     @PostMapping
     ResponseEntity<FollowDto> follow(@RequestBody FollowDto followDto) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        followDto.setBuyerId(userId);
+        followDto.setDate(LocalDateTime.now());
+
         Optional<FollowDto> optional = followService.save(followDto);
+
         if (optional.isPresent()) {
             return ResponseEntity.ok(optional.get());
         }

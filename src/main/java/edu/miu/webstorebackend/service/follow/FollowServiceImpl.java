@@ -74,8 +74,8 @@ public class FollowServiceImpl implements FollowService{
     private Follow fromFollowDto(FollowDto dto) {
         Follow follow = new Follow();
         follow.setDate(LocalDateTime.now());
-        follow.setBuyer(userRepository.getById(dto.getId()));
-        follow.setSeller(userRepository.getById(dto.getId()));
+        follow.setBuyer(userRepository.getById(dto.getBuyerId()));
+        follow.setSeller(userRepository.getById(dto.getSellerId()));
         return follow;
     }
 }
