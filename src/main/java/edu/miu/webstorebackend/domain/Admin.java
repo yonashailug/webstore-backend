@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
-public class Admin extends Role {
+public class Admin {
     @Id
     private Long id;
 

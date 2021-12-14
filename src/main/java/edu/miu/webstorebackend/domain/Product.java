@@ -1,19 +1,24 @@
 package edu.miu.webstorebackend.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
+import javax.persistence.*;
 import java.util.List;
+
+import edu.miu.webstorebackend.model.User;
 
 @Entity
 @NoArgsConstructor
+@Setter
+@Getter
 public class Product {
     @Id
     private Long id;
 
+    @ManyToOne
+    private User seller;
     private String name;
     private String category;
     private String description;

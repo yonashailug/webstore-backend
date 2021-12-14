@@ -6,7 +6,6 @@ import edu.miu.webstorebackend.dto.OrderDto;
 import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +16,12 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final GenericMapper mapper;
-    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public Optional<OrderDto> createOrder(OrderDto orderDto) {
-        Order order = modelMapper.map(orderDto, Order.class);
+        Order order = (Order)mapper.mapObject(orderDto, Order.class);
         orderRepository.save(order);
-        OrderDto savedOrderDto = modelMapper.map(order, OrderDto.class);
+        OrderDto savedOrderDto = (OrderDto) mapper.mapObject(order, OrderDto.class);
         return Optional.of(savedOrderDto);
     }
 
