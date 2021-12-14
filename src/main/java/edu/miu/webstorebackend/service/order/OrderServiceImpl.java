@@ -1,32 +1,46 @@
 package edu.miu.webstorebackend.service.order;
 
 import edu.miu.webstorebackend.domain.Order;
+import edu.miu.webstorebackend.domain.OrderItem;
 import edu.miu.webstorebackend.domain.OrderStatus;
-import edu.miu.webstorebackend.dto.OrderDto;
+import edu.miu.webstorebackend.domain.Product;
+import edu.miu.webstorebackend.dto.OrderItemRequestDto;
+import edu.miu.webstorebackend.dto.OrderItemResponseDto;
+import edu.miu.webstorebackend.dto.OrderRequestDto;
+import edu.miu.webstorebackend.dto.OrderResponseDto;
 import edu.miu.webstorebackend.helper.GenericMapper;
+import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.repository.OrderRepository;
+import edu.miu.webstorebackend.repository.ProductRepository;
+import edu.miu.webstorebackend.repository.UserRepository;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final GenericMapper mapper;
 
     @Override
-    public Optional<OrderDto> createOrder(OrderDto orderDto) {
-        Order order = (Order)mapper.mapObject(orderDto, Order.class);
+    public Optional<OrderResponseDto> createOrder(OrderRequestDto orderDto) {
+        Order order = fromDto(orderDto);
         orderRepository.save(order);
-        OrderDto savedOrderDto = (OrderDto) mapper.mapObject(order, OrderDto.class);
+        OrderResponseDto savedOrderDto = toDto(orderRepository.save(order));
         return Optional.of(savedOrderDto);
     }
 
     @Override
-    public Optional<OrderDto> cancelOrder(Long id) {
+    public Optional<OrderResponseDto> cancelOrder(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if(optionalOrder.isPresent()) {
            Order order = optionalOrder.get();
@@ -35,21 +49,21 @@ public class OrderServiceImpl implements OrderService{
                 order.setStatus(OrderStatus.CANCELED);
                 orderRepository.save(order);
            }
-            OrderDto dto = (OrderDto)mapper.mapObject(order, OrderDto.class);
+            OrderResponseDto dto = toDto(order);
             return Optional.of(dto);
         }
         return Optional.empty();
     }
 
     @Override
-    public List<OrderDto> getOrdersByUserId(Long id) {
+    public List<OrderResponseDto> getOrdersByUserId(Long id) {
         List<Order> orders = orderRepository.findOrdersByUserId(id);
-        List<OrderDto> dtos = mapper.mapList(orders, OrderDto.class);
+        List<OrderResponseDto> dtos = orders.stream().map(order -> toDto(order)).collect(Collectors.toList());
         return dtos;
     }
 
     @Override
-    public Optional<OrderDto> changeStatus(OrderStatus newStatus, Long id) {
+    public Optional<OrderResponseDto> changeStatus(OrderStatus newStatus, Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         //check if user owns the order
         if(optionalOrder.isPresent()) {
@@ -84,7 +98,7 @@ public class OrderServiceImpl implements OrderService{
             if(changed) {
                 orderRepository.save(order);
             }
-            OrderDto dto = (OrderDto)mapper.mapObject(order, OrderDto.class);
+            OrderResponseDto dto = toDto(order);
             return Optional.of(dto);
         }
         return Optional.empty();
@@ -100,5 +114,41 @@ public class OrderServiceImpl implements OrderService{
             }
         }
         return false;
+    }
+    
+    private OrderResponseDto toDto(Order order) {
+        OrderResponseDto dto = new OrderResponseDto();
+        dto.setId(order.getId());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setStatus(order.getStatus());
+        dto.setBillingAddress(order.getBillingAddress());
+        dto.setShippingAddress(order.getShippingAddress());
+        List<OrderItemResponseDto> items =  mapper.mapList(order.getOrderItems(), OrderResponseDto.class);
+        dto.setOrderItems(items);
+        return dto;
+    }
+
+    private Order fromDto(OrderRequestDto dto) {
+        Order order = new Order();
+        List<OrderItemRequestDto> items = dto.getOrderItems();
+        List<OrderItem> orderItems = items.stream().map(item -> {
+            Product p = productRepository.getById(item.getProductId());
+            OrderItem oItem = new OrderItem();
+            oItem.setProduct(p);
+            oItem.setOrder(order);
+            oItem.setStatus(OrderStatus.ORDERED);
+            oItem.setQuantity(item.getQuantity());
+            return oItem;
+        }).collect(Collectors.toList());
+        order.setOrderItems(orderItems);
+        order.setOrderDate(LocalDateTime.now());
+        order.setBillingAddress(dto.getBillingAddress());
+        order.setShippingAddress(dto.getShippingAddress());
+        order.setStatus(OrderStatus.ORDERED);
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        Optional<User> optional = userRepository.findById(userId);
+        order.setUser(optional.get());
+        return order;
     }
 }
