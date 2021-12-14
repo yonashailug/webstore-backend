@@ -1,5 +1,6 @@
 package edu.miu.webstorebackend.controller;
 
+import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.dto.authDtos.requestdtos.RegistrationRequest;
 import edu.miu.webstorebackend.dto.authDtos.responsedtos.RegistrationResponse;
 import edu.miu.webstorebackend.model.ERole;
@@ -11,13 +12,11 @@ import edu.miu.webstorebackend.service.UserService.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -61,5 +60,13 @@ public class UserManagementController {
         userService.addUser(user);
 
         return ResponseEntity.ok().body(new RegistrationResponse("Admin Registered Successfully"));
+    }
+
+    @GetMapping("/sellers")
+    public ResponseEntity<List<UserDto>> getSellers() {
+        Set<Role> roles = new HashSet<>();
+        Role r = roleService.findByName(ERole.SELLER);
+        roles.add(r);
+        return ResponseEntity.ok().body(userService.findUserByRole(roles));
     }
 }

@@ -17,4 +17,6 @@ public interface ProductService {
     Optional<ProductDto> save(ProductDto productDto);
     Optional<ProductDto> update(Long id, ProductDto productDto);
     Optional<ProductDto> delete(Long id);
+
+    List<ProductDto> findAllProducts();
 }

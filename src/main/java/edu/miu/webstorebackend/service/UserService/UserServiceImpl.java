@@ -1,5 +1,7 @@
 package edu.miu.webstorebackend.service.UserService;
 
+import edu.miu.webstorebackend.model.ERole;
+import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.helper.GenericMapper;
@@ -8,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -62,5 +67,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public Boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public List<UserDto> findUserByRole(Set<Role> roles) {
+        List<User> sellers = userRepository.findUserByRolesIn(roles);
+        return mapper.mapList(sellers, UserDto.class);
     }
 }

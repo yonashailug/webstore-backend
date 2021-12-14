@@ -93,4 +93,9 @@ public class ProductServiceImpl implements ProductService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public List<ProductDto> findAllProducts() {
+        return mapper.mapList(productRepository.findAll(), ProductDto.class);
+    }
 }

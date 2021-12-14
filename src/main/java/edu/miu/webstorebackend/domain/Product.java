@@ -15,6 +15,7 @@ import edu.miu.webstorebackend.model.User;
 @Getter
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -27,6 +28,7 @@ public class Product {
     private double tax;
     private double discount;
     private int stockCount;
+    private int quantity;
 
     @OneToMany
     private List<Rating> ratings;
