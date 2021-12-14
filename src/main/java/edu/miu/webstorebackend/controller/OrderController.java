@@ -1,5 +1,6 @@
 package edu.miu.webstorebackend.controller;
 
+public class OrderController {
 import edu.miu.webstorebackend.domain.OrderStatus;
 import edu.miu.webstorebackend.dto.OrderDto;
 import edu.miu.webstorebackend.dto.OrderStatusResponse;
@@ -41,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping("{id}/cancel")
-    @PreAuthorize("hasRole('Buyer')")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<OrderStatusResponse> cancelOrder(@PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -64,7 +65,7 @@ public class OrderController {
     }
 
     @PostMapping("{id}/status")
-    @PreAuthorize("hasRole('Seller')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<OrderStatusResponse> updateOrder(@RequestBody OrderStatus status, @PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
