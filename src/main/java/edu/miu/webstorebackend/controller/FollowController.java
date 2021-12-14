@@ -3,7 +3,7 @@ package edu.miu.webstorebackend.controller;
 import edu.miu.webstorebackend.dto.FollowDto;
 import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.model.User;
-import edu.miu.webstorebackend.security.services.UserDetailsImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.follow.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

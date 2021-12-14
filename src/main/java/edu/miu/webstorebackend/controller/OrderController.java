@@ -3,7 +3,7 @@ package edu.miu.webstorebackend.controller;
 import edu.miu.webstorebackend.domain.OrderStatus;
 import edu.miu.webstorebackend.dto.OrderDto;
 import edu.miu.webstorebackend.dto.OrderStatusResponse;
-import edu.miu.webstorebackend.security.services.UserDetailsImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +41,7 @@ public class OrderController {
     }
 
     @PostMapping("{id}/cancel")
-    @PreAuthorize("hasRole('Buyer')")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<OrderStatusResponse> cancelOrder(@PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -64,7 +64,7 @@ public class OrderController {
     }
 
     @PostMapping("{id}/status")
-    @PreAuthorize("hasRole('Seller')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<OrderStatusResponse> updateOrder(@RequestBody OrderStatus status, @PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();

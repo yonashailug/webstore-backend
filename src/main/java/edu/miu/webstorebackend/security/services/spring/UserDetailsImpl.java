@@ -1,7 +1,6 @@
-package edu.miu.webstorebackend.security.services;
+package edu.miu.webstorebackend.security.services.spring;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.model.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -44,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().name())).collect(Collectors.toList());
+                .map(role -> new SimpleGrantedAuthority( "ROLE_" + role.getName().name())).collect(Collectors.toList());
         return new UserDetailsImpl(
                 user.getId(),
                 user.getName(),

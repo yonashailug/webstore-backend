@@ -1,4 +1,4 @@
-package edu.miu.webstorebackend.security.services;
+package edu.miu.webstorebackend.security.services.spring;
 
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.repository.UserRepository;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -1,10 +1,7 @@
 package edu.miu.webstorebackend.security.jwt;
 
-import edu.miu.webstorebackend.security.services.UserDetailsServiceImpl;
-import org.apache.naming.factory.LookupFactory;
-import org.slf4j.LoggerFactory;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -37,7 +32,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         try {
             String token = parseJwt(request);
             if(token != null & jwtTokenUtil.validateToken(token)) {
@@ -56,10 +50,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String headerAuth = request.getHeader("Authorization");
         if(headerAuth != null) {
             if(headerAuth.startsWith("Bearer ") && !headerAuth.isEmpty()) {
-                headerAuth.substring(7, headerAuth.length());
+                return headerAuth.substring(7, headerAuth.length());
             }
         }
         return null;

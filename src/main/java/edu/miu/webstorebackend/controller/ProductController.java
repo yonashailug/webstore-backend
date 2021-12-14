@@ -1,8 +1,7 @@
 package edu.miu.webstorebackend.controller;
 
-import edu.miu.webstorebackend.dto.OrderDto;
 import edu.miu.webstorebackend.dto.ProductDto;
-import edu.miu.webstorebackend.security.services.UserDetailsImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
