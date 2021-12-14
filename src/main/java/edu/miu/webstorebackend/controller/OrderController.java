@@ -1,10 +1,9 @@
 package edu.miu.webstorebackend.controller;
 
-public class OrderController {
 import edu.miu.webstorebackend.domain.OrderStatus;
 import edu.miu.webstorebackend.dto.OrderDto;
 import edu.miu.webstorebackend.dto.OrderStatusResponse;
-import edu.miu.webstorebackend.security.services.UserDetailsImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;

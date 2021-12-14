@@ -2,7 +2,7 @@ package edu.miu.webstorebackend.security.config;
 
 import edu.miu.webstorebackend.security.jwt.AuthTokenFilter;
 import edu.miu.webstorebackend.security.jwt.AuthEntryPointJwt;
-import edu.miu.webstorebackend.security.services.UserDetailsServiceImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

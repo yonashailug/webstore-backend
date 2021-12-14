@@ -1,10 +1,7 @@
 package edu.miu.webstorebackend.security.jwt;
 
-import edu.miu.webstorebackend.security.services.UserDetailsServiceImpl;
-import org.apache.naming.factory.LookupFactory;
-import org.slf4j.LoggerFactory;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "orders")
 public class Order {
     @Id
     private Long id;
@@ -33,6 +34,4 @@ public class Order {
 
     private LocalDateTime orderDate;
 
-    @OneToOne
-    private Transaction transaction;
 }

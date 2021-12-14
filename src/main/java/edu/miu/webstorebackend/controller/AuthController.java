@@ -14,23 +14,19 @@ import edu.miu.webstorebackend.model.RefreshToken;
 import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.security.jwt.JwtTokenUtil;
-import edu.miu.webstorebackend.security.services.UserDetailsImpl;
+import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.RefreshTokenService.RefreshTokenService;
 import edu.miu.webstorebackend.service.RoleService.RoleService;
 import edu.miu.webstorebackend.service.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +44,6 @@ public class AuthController{
     private RoleService roleService;
     private GenericMapper modelMapper;
     private RefreshTokenService refreshTokenService;
-
     private PasswordEncoder encoder;
 
     @Autowired
