@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,22 +15,23 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "orders")
-public class Order {
+public class Order implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
     private OrderStatus status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address shippingAddress;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address billingAddress;
 
     private LocalDateTime orderDate;

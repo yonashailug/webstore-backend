@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.miu.webstorebackend.model.User;
@@ -13,13 +14,14 @@ import edu.miu.webstorebackend.model.User;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
     private User seller;
+
     private String name;
     private String category;
     private String description;

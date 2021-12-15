@@ -4,10 +4,7 @@ import edu.miu.webstorebackend.domain.Order;
 import edu.miu.webstorebackend.domain.OrderItem;
 import edu.miu.webstorebackend.domain.OrderStatus;
 import edu.miu.webstorebackend.domain.Product;
-import edu.miu.webstorebackend.dto.OrderItemRequestDto;
-import edu.miu.webstorebackend.dto.OrderItemResponseDto;
-import edu.miu.webstorebackend.dto.OrderRequestDto;
-import edu.miu.webstorebackend.dto.OrderResponseDto;
+import edu.miu.webstorebackend.dto.*;
 import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.repository.OrderRepository;
@@ -34,8 +31,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Optional<OrderResponseDto> createOrder(OrderRequestDto orderDto) {
         Order order = fromDto(orderDto);
-        orderRepository.save(order);
-        OrderResponseDto savedOrderDto = toDto(orderRepository.save(order));
+        Order savedOrder = orderRepository.save(order);
+        OrderResponseDto savedOrderDto = toDto(savedOrder);
         return Optional.of(savedOrderDto);
     }
 
@@ -123,14 +120,22 @@ public class OrderServiceImpl implements OrderService{
         dto.setStatus(order.getStatus());
         dto.setBillingAddress(order.getBillingAddress());
         dto.setShippingAddress(order.getShippingAddress());
-        List<OrderItemResponseDto> items =  mapper.mapList(order.getOrderItems(), OrderResponseDto.class);
-        dto.setOrderItems(items);
+
+        dto.setOrderItems(order.getOrderItems().stream().map(orderItem -> {
+            OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto();
+            orderItemResponseDto.setProduct((ProductDto) mapper.mapObject(orderItem.getProduct(), ProductDto.class));
+            orderItemResponseDto.setQuantity(orderItem.getQuantity());
+            orderItemResponseDto.setStatus(orderItem.getStatus());
+            return orderItemResponseDto;
+        }).collect(Collectors.toList()));
+
         return dto;
     }
 
     private Order fromDto(OrderRequestDto dto) {
         Order order = new Order();
         List<OrderItemRequestDto> items = dto.getOrderItems();
+
         List<OrderItem> orderItems = items.stream().map(item -> {
             Product p = productRepository.getById(item.getProductId());
             OrderItem oItem = new OrderItem();
@@ -145,6 +150,7 @@ public class OrderServiceImpl implements OrderService{
         order.setBillingAddress(dto.getBillingAddress());
         order.setShippingAddress(dto.getShippingAddress());
         order.setStatus(OrderStatus.ORDERED);
+
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         Optional<User> optional = userRepository.findById(userId);
