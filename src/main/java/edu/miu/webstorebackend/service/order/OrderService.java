@@ -15,4 +15,5 @@ public interface OrderService {
     List<OrderResponseDto> getOrdersByUserId(Long id);
     Optional<OrderResponseDto> changeStatus(OrderStatus newStatus, Long id);
     boolean isOrderBelongToUser(Long orderId, Long userId);
+    List<OrderResponseDto> getOrdersForSeller(Long id);
 }

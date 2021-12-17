@@ -4,15 +4,21 @@ import edu.miu.webstorebackend.domain.OrderStatus;
 import edu.miu.webstorebackend.dto.OrderRequestDto;
 import edu.miu.webstorebackend.dto.OrderResponseDto;
 import edu.miu.webstorebackend.dto.OrderStatusResponse;
+import edu.miu.webstorebackend.dto.UserDto;
+import edu.miu.webstorebackend.model.ERole;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
+import edu.miu.webstorebackend.service.UserService.UserService;
 import edu.miu.webstorebackend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +32,14 @@ public class OrderController {
     public ResponseEntity<List<OrderResponseDto>> getAll() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
-        List<OrderResponseDto> orderDtos = orderService.getOrdersByUserId(userId);
+
+        List<OrderResponseDto> orderDtos;
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SELLER"))) {
+            orderDtos = orderService.getOrdersForSeller(userId);
+        } else {
+            orderDtos = orderService.getOrdersByUserId(userId);
+        }
         return ResponseEntity.ok(orderDtos);
     }
 
@@ -84,5 +97,13 @@ public class OrderController {
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/seller")
+    public ResponseEntity<List<OrderResponseDto>> getOrdersForSeller() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        List<OrderResponseDto> orderDtos = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orderDtos);
     }
 }

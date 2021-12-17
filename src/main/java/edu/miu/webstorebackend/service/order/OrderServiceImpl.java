@@ -157,4 +157,12 @@ public class OrderServiceImpl implements OrderService{
         order.setUser(optional.get());
         return order;
     }
+
+    @Override
+    public List<OrderResponseDto> getOrdersForSeller(Long id) {
+        List<Order> orders = orderRepository.findAll()
+                .stream()
+                .filter(order -> order.getOrderItems().stream().anyMatch(o -> o.getProduct().getSeller().getId() == id)).collect(Collectors.toList());
+        return orders.stream().map(this::toDto).collect(Collectors.toList());
+    }
 }

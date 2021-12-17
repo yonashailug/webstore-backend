@@ -14,7 +14,7 @@ public interface ProductService {
 
     boolean isProductBelongToUser(Long productId, Long userId);
     Optional<ProductDto> getProduct(Long id);
-    Optional<ProductDto> save(ProductDto productDto);
+    Optional<ProductDto> save(ProductDto productDto, Long userId);
     Optional<ProductDto> update(Long id, ProductDto productDto);
     Optional<ProductDto> delete(Long id);
 

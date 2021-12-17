@@ -6,9 +6,11 @@ import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.repository.FollowRepository;
 import edu.miu.webstorebackend.repository.ProductRepository;
+import edu.miu.webstorebackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final FollowRepository followRepository;
+    private final UserRepository userRepository;
 
     private final GenericMapper mapper;
 
@@ -60,8 +63,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDto> save(ProductDto productDto) {
+    public Optional<ProductDto> save(ProductDto productDto, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Product product = (Product) mapper.mapObject(productDto, Product.class);
+        product.setSeller(user);
         productRepository.save(product);
         ProductDto dto = (ProductDto)mapper.mapObject(product, ProductDto.class);
         return Optional.of(dto);

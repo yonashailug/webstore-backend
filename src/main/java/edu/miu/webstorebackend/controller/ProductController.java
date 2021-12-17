@@ -53,7 +53,10 @@ public class ProductController {
 
     @PostMapping
     ResponseEntity<ProductDto> create(@RequestBody ProductDto productDto) {
-        Optional<ProductDto> optionalProductDto = productService.save(productDto);
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+
+        Optional<ProductDto> optionalProductDto = productService.save(productDto, userId);
         if (optionalProductDto.isPresent()) {
             return ResponseEntity.ok(optionalProductDto.get());
         }
