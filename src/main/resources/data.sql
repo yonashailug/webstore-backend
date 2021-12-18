@@ -10,6 +10,6 @@ INSERT INTO user_roles(user_id, role_id) VALUES(1, 2);
 INSERT INTO user_roles(user_id, role_id) VALUES(2, 3);
 INSERT INTO user_roles(user_id, role_id) VALUES(3, 1);
 
-INSERT into product (id, name, price, quantity, category, description, seller_id, discount, tax)  VALUES (1, 'iPhone 13',1200,3,'phones', 'Brand new iphone 13', 2, 0,0);
-INSERT into product (id, name, price, quantity, category, description, seller_id, discount, tax)  VALUES (2, 'iPhone 12',900,3,'phones', 'Brand new iphone 12', 2, 0,0);
-INSERT into product (id, name, price, quantity, category, description, seller_id, discount, tax)  VALUES (3, 'iPhone 11',800,3,'phones', 'Brand new iphone 11', 2, 0,0);
+INSERT into product (name, price, quantity, category, description, seller_id, discount, tax)  VALUES ( 'iPhone 13',1200,3,'phones', 'Brand new iphone 13', 1, 0,0);
+INSERT into product (name, price, quantity, category, description, seller_id, discount, tax)  VALUES ('iPhone 12',900,3,'phones', 'Brand new iphone 12', 1, 0,0);
+INSERT into product (name, price, quantity, category, description, seller_id, discount, tax)  VALUES ('iPhone 11',800,3,'phones', 'Brand new iphone 11', 1, 0,0);

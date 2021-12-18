@@ -36,6 +36,8 @@ public class UserManagementController {
     public UserManagementController(AuthService authService, UserManagementService userManagementService,
             RoleService roleService, UserService userService) {
         this.managementService = userManagementService;
+        this.roleService = roleService;
+        this.userService = userService;
         this.authService = authService;
     }
 

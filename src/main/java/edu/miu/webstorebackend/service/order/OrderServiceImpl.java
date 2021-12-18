@@ -37,6 +37,8 @@ public class OrderServiceImpl implements OrderService{
         Order order = fromDto(orderDto);
         Order savedOrder = orderRepository.save(order);
         OrderResponseDto savedOrderDto = toDto(savedOrder);
+        User user = savedOrder.getUser();
+        sendProcessNotificationEmail(user.getUsername(), user.getEmail(), savedOrder.getStatus().name());
         return Optional.of(savedOrderDto);
     }
 
@@ -51,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
                 orderRepository.save(order);
            }
            User user = optionalOrder.get().getUser();
-           sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  status.name());
+           sendProcessNotificationEmail(user.getUsername(), user.getEmail(), order.getStatus().name());
             OrderResponseDto dto = toDto(order);
             return Optional.of(dto);
         }
@@ -82,21 +84,21 @@ public class OrderServiceImpl implements OrderService{
                     }
                     break;
                 case ACCEPTED:
-                    if (newStatus == OrderStatus.SHIPPED || newStatus == OrderStatus.CANCELED) {
+                    if (newStatus == OrderStatus.SHIPPED ) {
                         order.setStatus(newStatus);
                         changed = true;
                         sendProcessNotificationEmail(user.getUsername(), user.getEmail(), newStatus.name());
                     }
                     break;
                 case SHIPPED:
-                    if (newStatus == OrderStatus.ONTHEWAY || newStatus == OrderStatus.CANCELED) {
+                    if (newStatus == OrderStatus.ONTHEWAY ) {
                         order.setStatus(newStatus);
                         changed = true;
                         sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  newStatus.name());
                     }
                     break;
                 case ONTHEWAY:
-                    if (newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELED) {
+                    if (newStatus == OrderStatus.DELIVERED) {
                         order.setStatus(newStatus);
                         changed = true;
                         sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  newStatus.name());
