@@ -1,24 +1,16 @@
 package edu.miu.webstorebackend.controller;
 
-import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.dto.authDtos.requestdtos.AuthenticationRequest;
 import edu.miu.webstorebackend.dto.authDtos.requestdtos.RegistrationRequest;
 import edu.miu.webstorebackend.dto.authDtos.requestdtos.TokenRefreshRequest;
 import edu.miu.webstorebackend.dto.authDtos.responsedtos.AuthenticationResponse;
+import edu.miu.webstorebackend.dto.authDtos.responsedtos.VerifyTokenResponse;
 import edu.miu.webstorebackend.dto.authDtos.responsedtos.RegistrationResponse;
 import edu.miu.webstorebackend.dto.authDtos.responsedtos.TokenRefreshResponse;
 import edu.miu.webstorebackend.exception.TokenRefreshException;
-import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.model.ERole;
-import edu.miu.webstorebackend.model.RefreshToken;
-import edu.miu.webstorebackend.model.Role;
-import edu.miu.webstorebackend.model.User;
-import edu.miu.webstorebackend.security.jwt.JwtTokenUtil;
 import edu.miu.webstorebackend.security.services.auth.AuthService;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
-import edu.miu.webstorebackend.service.RefreshTokenService.RefreshTokenService;
-import edu.miu.webstorebackend.service.RoleService.RoleService;
-import edu.miu.webstorebackend.service.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +18,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.AbstractMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -65,7 +51,7 @@ public class AuthController{
 
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponse> registerBuyer(@Valid @RequestBody RegistrationRequest registrationRequest) {
-        var buyerRegistrationEntry = authService.registerUser(registrationRequest, ERole.BUYER, true);
+        var buyerRegistrationEntry = authService.registerUser(registrationRequest, ERole.BUYER, false);
         HttpStatus status = buyerRegistrationEntry.getKey() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
         RegistrationResponse response = buyerRegistrationEntry.getValue();
         return new ResponseEntity(response, status);
@@ -78,6 +64,8 @@ public class AuthController{
         return new ResponseEntity(response, status);
     }
 
+    //Refactor --- clean exception handling to service
+
     @PostMapping("/token/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
         String refreshToken = tokenRefreshRequest.getRefreshToken();
@@ -87,6 +75,13 @@ public class AuthController{
                     refreshToken,
                 "Bearer"
                     ));
+    }
+    @GetMapping("/activate")
+    public ResponseEntity<VerifyTokenResponse> activation(@RequestParam("token") String token) {
+        var tokenVerifiedEntry = authService.verifyToken(token);
+        HttpStatus status = tokenVerifiedEntry.getKey() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        VerifyTokenResponse response = tokenVerifiedEntry.getValue();
+        return new ResponseEntity<>(response,status);
     }
 
 

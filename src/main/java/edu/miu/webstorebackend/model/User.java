@@ -27,14 +27,11 @@ public class User {
     private long id;
     private String name;
 
-    @NotBlank(message = "username cannot be empty")
     private String username;
 
-    @NotBlank(message = "password cannot be empty")
     private String password;
     private boolean isEnabled;
 
-    @NotBlank(message = "email cannot be empty")
     @Email
     private String email;
     @ManyToMany(fetch = FetchType.LAZY)
