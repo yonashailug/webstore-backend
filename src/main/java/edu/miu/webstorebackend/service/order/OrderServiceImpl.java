@@ -1,9 +1,10 @@
 package edu.miu.webstorebackend.service.order;
 
-import edu.miu.webstorebackend.domain.Order;
-import edu.miu.webstorebackend.domain.OrderItem;
-import edu.miu.webstorebackend.domain.OrderStatus;
-import edu.miu.webstorebackend.domain.Product;
+import edu.miu.webstorebackend.Utility.MailBuilder;
+import edu.miu.webstorebackend.model.Order;
+import edu.miu.webstorebackend.model.OrderItem;
+import edu.miu.webstorebackend.model.OrderStatus;
+import edu.miu.webstorebackend.model.Product;
 import edu.miu.webstorebackend.dto.*;
 import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.model.User;
@@ -11,10 +12,12 @@ import edu.miu.webstorebackend.repository.OrderRepository;
 import edu.miu.webstorebackend.repository.ProductRepository;
 import edu.miu.webstorebackend.repository.UserRepository;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
+import edu.miu.webstorebackend.service.EmailService.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,7 @@ public class OrderServiceImpl implements OrderService{
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final GenericMapper mapper;
+    private final EmailService emailService;
 
     @Override
     public Optional<OrderResponseDto> createOrder(OrderRequestDto orderDto) {
@@ -46,6 +50,8 @@ public class OrderServiceImpl implements OrderService{
                 order.setStatus(OrderStatus.CANCELED);
                 orderRepository.save(order);
            }
+           User user = optionalOrder.get().getUser();
+           sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  status.name());
             OrderResponseDto dto = toDto(order);
             return Optional.of(dto);
         }
@@ -66,29 +72,34 @@ public class OrderServiceImpl implements OrderService{
         if(optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             boolean changed = false;
+            User user = optionalOrder.get().getUser();
             switch (order.getStatus()) {
                 case ORDERED:
                     if (newStatus == OrderStatus.ACCEPTED || newStatus == OrderStatus.CANCELED) {
                         order.setStatus(newStatus);
                         changed = true;
+                        sendProcessNotificationEmail(user.getUsername(), user.getEmail(), newStatus.name());
                     }
                     break;
                 case ACCEPTED:
                     if (newStatus == OrderStatus.SHIPPED || newStatus == OrderStatus.CANCELED) {
                         order.setStatus(newStatus);
                         changed = true;
+                        sendProcessNotificationEmail(user.getUsername(), user.getEmail(), newStatus.name());
                     }
                     break;
                 case SHIPPED:
                     if (newStatus == OrderStatus.ONTHEWAY || newStatus == OrderStatus.CANCELED) {
                         order.setStatus(newStatus);
                         changed = true;
+                        sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  newStatus.name());
                     }
                     break;
                 case ONTHEWAY:
                     if (newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELED) {
                         order.setStatus(newStatus);
                         changed = true;
+                        sendProcessNotificationEmail(user.getUsername(), user.getEmail(),  newStatus.name());
                     }
                     break;
             }
@@ -165,5 +176,15 @@ public class OrderServiceImpl implements OrderService{
                 .stream()
                 .filter(order -> order.getOrderItems().stream().anyMatch(o -> o.getProduct().getSeller().getId() == id)).collect(Collectors.toList());
         return orders.stream().map(this::toDto).collect(Collectors.toList());
+    }
+    private void sendProcessNotificationEmail(String name, String email, String message) {
+        try{
+            String subject = "Order Notification";
+            String messageFormatted = "Your order is "+  message + " .Thank you for using web store";
+            emailService.sendEMail(email, subject, MailBuilder.buildMail(subject,name,messageFormatted));
+        }
+        catch (MessagingException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 }

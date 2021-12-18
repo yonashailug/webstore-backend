@@ -28,8 +28,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto getById(long id) {
-        return (UserDto) mapper.mapObject(userRepository.findById(id).orElse(null),UserDto.class);
+    public User getById(long id) {
+        return userRepository.findById(id).orElse(null);
+        //return (UserDto) mapper.mapObject(userRepository.findById(id).orElse(null),UserDto.class);
     }
 
     @Override
@@ -70,6 +71,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public int enableUser(String email) {
+        return userRepository.enableUser(email);
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return userRepository.existsById(id);
+    } 
     public List<UserDto> findUserByRole(Set<Role> roles) {
         List<User> sellers = userRepository.findUserByRolesIn(roles);
         return mapper.mapList(sellers, UserDto.class);

@@ -1,27 +1,23 @@
-package edu.miu.webstorebackend.domain;
+package edu.miu.webstorebackend.model;
 
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
-
-enum SellerStatus {
-    REQUESTED,APPROVED,SUSPENDED,REJECTED
-}
 
 @Entity
 @NoArgsConstructor
-public class Seller {
+public class ShoppingCart {
     @Id
     private Long id;
 
-    private SellerStatus status;
+    @OneToOne
+    private Buyer buyer;
 
     @OneToMany
     private List<Product> products;
 
-    @OneToMany
-    private List<OrderItem> orderItems;
 }

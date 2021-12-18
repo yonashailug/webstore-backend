@@ -1,13 +1,10 @@
 package edu.miu.webstorebackend.controller;
 
-import edu.miu.webstorebackend.domain.Review;
-import edu.miu.webstorebackend.dto.FollowDto;
-import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
+import edu.miu.webstorebackend.model.Review;
 import edu.miu.webstorebackend.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

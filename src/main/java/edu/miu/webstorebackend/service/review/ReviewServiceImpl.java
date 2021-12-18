@@ -1,7 +1,7 @@
 package edu.miu.webstorebackend.service.review;
 
-import edu.miu.webstorebackend.domain.Review;
-import edu.miu.webstorebackend.domain.ReviewStatus;
+import edu.miu.webstorebackend.model.Review;
+import edu.miu.webstorebackend.model.ReviewStatus;
 import edu.miu.webstorebackend.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

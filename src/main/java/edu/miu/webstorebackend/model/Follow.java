@@ -1,14 +1,18 @@
-package edu.miu.webstorebackend.domain;
+package edu.miu.webstorebackend.model;
 
 import edu.miu.webstorebackend.model.User;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Setter
+@Getter
 @NoArgsConstructor
-public class Payment {
+public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,9 +20,8 @@ public class Payment {
     @ManyToOne
     private User buyer;
 
-    private String name;
-    private String cardNumber;
-    private LocalDate expiration;
-    private String securityCode;
-    private double balance;
+    @ManyToOne
+    private User seller;
+
+    private LocalDateTime date;
 }

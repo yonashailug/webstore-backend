@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.repository;
 
-import edu.miu.webstorebackend.domain.Follow;
+import edu.miu.webstorebackend.model.Follow;
 import edu.miu.webstorebackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

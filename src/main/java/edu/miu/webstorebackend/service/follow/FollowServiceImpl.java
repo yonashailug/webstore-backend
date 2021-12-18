@@ -1,10 +1,6 @@
 package edu.miu.webstorebackend.service.follow;
 
-import edu.miu.webstorebackend.domain.Follow;
-import edu.miu.webstorebackend.domain.Follow;
-import edu.miu.webstorebackend.domain.Follow;
-import edu.miu.webstorebackend.dto.FollowDto;
-import edu.miu.webstorebackend.dto.FollowDto;
+import edu.miu.webstorebackend.model.Follow;
 import edu.miu.webstorebackend.dto.FollowDto;
 import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.helper.GenericMapper;

@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.dto;
 
-import edu.miu.webstorebackend.domain.*;
+import edu.miu.webstorebackend.model.Address;
 import lombok.Getter;
 import lombok.Setter;
 

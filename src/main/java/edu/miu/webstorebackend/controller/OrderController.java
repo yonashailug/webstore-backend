@@ -1,21 +1,17 @@
 package edu.miu.webstorebackend.controller;
 
-import edu.miu.webstorebackend.domain.OrderStatus;
+import edu.miu.webstorebackend.model.OrderStatus;
 import edu.miu.webstorebackend.dto.*;
-import edu.miu.webstorebackend.model.ERole;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
-import edu.miu.webstorebackend.service.UserService.UserService;
 import edu.miu.webstorebackend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.dto;
 
-import edu.miu.webstorebackend.domain.OrderStatus;
+import edu.miu.webstorebackend.model.OrderStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

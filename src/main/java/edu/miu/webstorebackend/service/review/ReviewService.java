@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.service.review;
 
-import edu.miu.webstorebackend.domain.Review;
+import edu.miu.webstorebackend.model.Review;
 
 import java.util.List;
 import java.util.Optional;

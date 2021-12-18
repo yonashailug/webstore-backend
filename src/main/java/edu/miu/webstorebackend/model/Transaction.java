@@ -1,4 +1,4 @@
-package edu.miu.webstorebackend.domain;
+package edu.miu.webstorebackend.model;
 
 import lombok.NoArgsConstructor;
 
