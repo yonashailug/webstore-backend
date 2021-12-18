@@ -13,17 +13,22 @@ import java.util.Set;
 
 public interface UserService {
 
-    public UserDto getById(long id);
+     User getById(long id);
 
-    public UserDto findByUserName(String userName);
+     UserDto findByUserName(String userName);
 
-    public void addUser(User user);
+     void addUser(User user);
 
-    public void deleteById(long id);
+     void deleteById(long id);
 
-    public void updateUser(long id, UserDto user);
+     void updateUser(long id, UserDto user);
 
-    public Boolean existsByEmail(String email);
+     Boolean existsByEmail(String email);
+
+     Boolean existsByUsername(String username);
+     boolean existsById(long id);
+
+     int enableUser(String email);
 
     public Boolean existsByUsername(String username);
 
