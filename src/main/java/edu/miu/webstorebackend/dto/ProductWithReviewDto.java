@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.dto;
 
-import edu.miu.webstorebackend.domain.Review;
+import edu.miu.webstorebackend.model.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

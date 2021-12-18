@@ -29,10 +29,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      @Modifying
      @Query("UPDATE User u SET u.isEnabled = true where u.email = ?1")
      int enableUser(String email);
-
-    public List<User> findAll();
-    public Optional<User> findByUsername(String userName);
-    Boolean existsByEmail(String email);
-    Boolean existsByUsername(String username);
     List<User> findUserByRolesIn(Set<Role> role);
 }

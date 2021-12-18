@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.service.order;
 
-import edu.miu.webstorebackend.domain.OrderStatus;
+import edu.miu.webstorebackend.model.OrderStatus;
 import edu.miu.webstorebackend.dto.OrderRequestDto;
 import edu.miu.webstorebackend.dto.OrderResponseDto;
 import org.springframework.stereotype.Service;

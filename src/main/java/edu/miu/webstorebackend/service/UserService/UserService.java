@@ -30,7 +30,5 @@ public interface UserService {
 
      int enableUser(String email);
 
-    public Boolean existsByUsername(String username);
-
     List<UserDto> findUserByRole(Set<Role> roles);
 }

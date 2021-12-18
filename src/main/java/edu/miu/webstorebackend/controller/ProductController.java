@@ -1,6 +1,6 @@
 package edu.miu.webstorebackend.controller;
 
-import edu.miu.webstorebackend.domain.Review;
+import edu.miu.webstorebackend.model.Review;
 import edu.miu.webstorebackend.dto.ProductDto;
 import edu.miu.webstorebackend.dto.ProductWithReviewDto;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;

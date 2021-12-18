@@ -1,8 +1,8 @@
 package edu.miu.webstorebackend.service.product;
 
-import edu.miu.webstorebackend.domain.Product;
-import edu.miu.webstorebackend.domain.Review;
-import edu.miu.webstorebackend.domain.ReviewStatus;
+import edu.miu.webstorebackend.model.Product;
+import edu.miu.webstorebackend.model.Review;
+import edu.miu.webstorebackend.model.ReviewStatus;
 import edu.miu.webstorebackend.dto.ProductDto;
 import edu.miu.webstorebackend.dto.ProductWithReviewDto;
 import edu.miu.webstorebackend.helper.GenericMapper;

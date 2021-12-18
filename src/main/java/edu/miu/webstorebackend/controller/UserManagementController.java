@@ -5,8 +5,11 @@ import edu.miu.webstorebackend.dto.UserDto;
 import edu.miu.webstorebackend.dto.authDtos.requestdtos.RegistrationRequest;
 import edu.miu.webstorebackend.dto.authDtos.responsedtos.RegistrationResponse;
 import edu.miu.webstorebackend.model.ERole;
+import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.security.services.auth.AuthService;
+import edu.miu.webstorebackend.service.RoleService.RoleService;
 import edu.miu.webstorebackend.service.UserManagementService.UserManagementService;
+import edu.miu.webstorebackend.service.UserService.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,8 +30,11 @@ public class UserManagementController {
 
     private AuthService authService;
     private UserManagementService managementService;
+    private RoleService roleService;
+    private UserService userService;
 
-    public UserManagementController(AuthService authService, UserManagementService userManagementService) {
+    public UserManagementController(AuthService authService, UserManagementService userManagementService,
+            RoleService roleService, UserService userService) {
         this.managementService = userManagementService;
         this.authService = authService;
     }

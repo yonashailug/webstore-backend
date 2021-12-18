@@ -1,7 +1,7 @@
 package edu.miu.webstorebackend.dto;
 
-import edu.miu.webstorebackend.domain.Address;
-import edu.miu.webstorebackend.domain.OrderStatus;
+import edu.miu.webstorebackend.model.Address;
+import edu.miu.webstorebackend.model.OrderStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;

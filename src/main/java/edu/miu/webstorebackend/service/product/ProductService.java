@@ -1,7 +1,6 @@
 package edu.miu.webstorebackend.service.product;
 
-import edu.miu.webstorebackend.domain.Product;
-import edu.miu.webstorebackend.domain.Review;
+import edu.miu.webstorebackend.model.Review;
 import edu.miu.webstorebackend.dto.ProductDto;
 import edu.miu.webstorebackend.dto.ProductWithReviewDto;
 import org.springframework.stereotype.Service;
