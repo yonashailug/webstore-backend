@@ -1,6 +1,7 @@
 package edu.miu.webstorebackend.dto;
 
 import edu.miu.webstorebackend.model.Address;
+import edu.miu.webstorebackend.model.Payment;
 import lombok.Getter;
 import lombok.Setter;
 
