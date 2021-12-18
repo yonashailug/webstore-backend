@@ -1,6 +1,7 @@
 package edu.miu.webstorebackend.security.services.spring;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.miu.webstorebackend.model.Role;
 import edu.miu.webstorebackend.model.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
