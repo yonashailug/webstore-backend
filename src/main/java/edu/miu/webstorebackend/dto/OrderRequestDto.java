@@ -12,4 +12,5 @@ public class OrderRequestDto {
     private List<OrderItemRequestDto> orderItems;
     private Address shippingAddress;
     private Address billingAddress;
+    private Payment payment;
 }

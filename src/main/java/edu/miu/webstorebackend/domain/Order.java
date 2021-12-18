@@ -34,6 +34,9 @@ public class Order implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Address billingAddress;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Payment payment;
+
     private LocalDateTime orderDate;
 
 }

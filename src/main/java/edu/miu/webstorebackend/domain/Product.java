@@ -29,7 +29,6 @@ public class Product implements Serializable {
     private double price;
     private double tax;
     private double discount;
-    private int stockCount;
     private int quantity;
 
     @OneToMany

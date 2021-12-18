@@ -28,7 +28,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
-
     private final GenericMapper mapper;
 
     @Override

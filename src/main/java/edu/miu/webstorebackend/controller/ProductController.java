@@ -48,6 +48,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('SELLER')")
     ResponseEntity<ProductDto> create(@RequestBody ProductDto productDto) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -62,6 +63,7 @@ public class ProductController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('SELLER')")
     ResponseEntity<ProductDto> update(@RequestBody ProductDto productDto, @RequestParam Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -79,6 +81,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('SELLER')")
     ResponseEntity<ProductDto> delete(@RequestParam Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
@@ -117,4 +120,5 @@ public class ProductController {
     ResponseEntity<List<Review>> getReviewForProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getReviewForProduct(id));
     }
+
 }

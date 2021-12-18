@@ -1,5 +1,6 @@
 package edu.miu.webstorebackend.domain;
 
+import edu.miu.webstorebackend.model.User;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class Payment {
     private Long id;
 
     @ManyToOne
-    private Buyer buyer;
+    private User buyer;
 
     private String name;
     private String cardNumber;

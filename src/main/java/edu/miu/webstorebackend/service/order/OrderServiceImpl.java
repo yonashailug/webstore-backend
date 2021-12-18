@@ -149,6 +149,7 @@ public class OrderServiceImpl implements OrderService{
         order.setOrderDate(LocalDateTime.now());
         order.setBillingAddress(dto.getBillingAddress());
         order.setShippingAddress(dto.getShippingAddress());
+        order.setPayment(dto.getPayment());
         order.setStatus(OrderStatus.ORDERED);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
