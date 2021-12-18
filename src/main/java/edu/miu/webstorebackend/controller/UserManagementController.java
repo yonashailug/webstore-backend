@@ -28,7 +28,7 @@ public class UserManagementController {
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RegistrationResponse> registerAdmin(@Valid @RequestBody RegistrationRequest registrationRequest) {
-        var adminRegistrationEntry = authService.registerUser(registrationRequest, ERole.SELLER, false);
+        var adminRegistrationEntry = authService.registerUser(registrationRequest, ERole.ADMIN, false);
         HttpStatus status = adminRegistrationEntry.getKey() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
         RegistrationResponse response = adminRegistrationEntry.getValue();
         return new ResponseEntity(response, status);

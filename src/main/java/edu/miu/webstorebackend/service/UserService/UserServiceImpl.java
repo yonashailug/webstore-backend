@@ -23,8 +23,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto getById(long id) {
-        return (UserDto) mapper.mapObject(userRepository.findById(id).orElse(null),UserDto.class);
+    public User getById(long id) {
+        return userRepository.findById(id).orElse(null);
+        //return (UserDto) mapper.mapObject(userRepository.findById(id).orElse(null),UserDto.class);
     }
 
     @Override

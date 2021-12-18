@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface UserService {
 
-     UserDto getById(long id);
+     User getById(long id);
 
      UserDto findByUserName(String userName);
 

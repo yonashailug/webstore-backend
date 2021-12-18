@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.AbstractMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,7 +31,8 @@ public class UserManagementServiceImpl implements UserManagementService{
                     new ActivateSellerResponse("user not found")
             );
         }
-        if(! userService.getById(id).getRoles().contains(ERole.SELLER)) {
+        List<ERole> roles = userService.getById(id).getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+        if(!roles.contains(ERole.SELLER)) {
             return new AbstractMap.SimpleImmutableEntry<>(
                     false,
                     new ActivateSellerResponse("User is not a seller")

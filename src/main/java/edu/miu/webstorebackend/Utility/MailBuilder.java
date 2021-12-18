@@ -56,7 +56,7 @@ public class MailBuilder {
                 "        \n" +
                 "                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
                 "                  <tbody><tr>\n" +
-                "                    <td bgcolor=\"#1D70B8\" width=\"100%\" height=\"5\"></td>\n" +
+                "                    <td bgcolor=\"#10844C\" width=\"100%\" height=\"5\"></td>\n" +
                 "                  </tr>\n" +
                 "                </tbody></table>\n" +
                 "        \n" +
