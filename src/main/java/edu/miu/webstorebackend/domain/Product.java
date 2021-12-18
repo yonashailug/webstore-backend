@@ -17,7 +17,7 @@ import edu.miu.webstorebackend.model.User;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User seller;
@@ -35,6 +35,6 @@ public class Product implements Serializable {
     @OneToMany
     private List<Rating> ratings;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Review> reviews;
 }

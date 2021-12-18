@@ -1,7 +1,10 @@
 package edu.miu.webstorebackend.service.product;
 
 import edu.miu.webstorebackend.domain.Product;
+import edu.miu.webstorebackend.domain.Review;
+import edu.miu.webstorebackend.domain.ReviewStatus;
 import edu.miu.webstorebackend.dto.ProductDto;
+import edu.miu.webstorebackend.dto.ProductWithReviewDto;
 import edu.miu.webstorebackend.helper.GenericMapper;
 import edu.miu.webstorebackend.model.User;
 import edu.miu.webstorebackend.repository.FollowRepository;
@@ -13,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,10 +57,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDto> getProduct(Long id) {
+    public Optional<ProductWithReviewDto> getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            ProductDto dto = (ProductDto)mapper.mapObject(optionalProduct.get(), ProductDto.class);
+            ProductWithReviewDto dto = (ProductWithReviewDto)mapper.mapObject(optionalProduct.get(), ProductWithReviewDto.class);
+
             return Optional.of(dto);
         }
         return Optional.empty();
@@ -102,5 +107,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findAllProducts() {
         return mapper.mapList(productRepository.findAll(), ProductDto.class);
+    }
+
+    @Override
+    public Optional<Review> saveProductReview(Review review, Long productId, Long userId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            review.setBuyer(user);
+            review.setStatus(ReviewStatus.REQUESTED);
+            product.getReviews().add(review);
+            productRepository.save(product);
+            return Optional.of(review);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Review> getReviewForProduct(Long productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            return product.getReviews();
+        }
+        return new ArrayList<>();
     }
 }

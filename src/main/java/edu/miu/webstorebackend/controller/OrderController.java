@@ -1,10 +1,7 @@
 package edu.miu.webstorebackend.controller;
 
 import edu.miu.webstorebackend.domain.OrderStatus;
-import edu.miu.webstorebackend.dto.OrderRequestDto;
-import edu.miu.webstorebackend.dto.OrderResponseDto;
-import edu.miu.webstorebackend.dto.OrderStatusResponse;
-import edu.miu.webstorebackend.dto.UserDto;
+import edu.miu.webstorebackend.dto.*;
 import edu.miu.webstorebackend.model.ERole;
 import edu.miu.webstorebackend.security.services.spring.UserDetailsImpl;
 import edu.miu.webstorebackend.service.UserService.UserService;
@@ -79,24 +76,24 @@ public class OrderController {
 
     @PostMapping("{id}/status")
     @PreAuthorize("hasRole('SELLER')")
-    public ResponseEntity<OrderStatusResponse> updateOrder(@RequestBody OrderStatus status, @PathVariable Long id) {
+    public ResponseEntity<OrderStatusResponse> updateOrder(@RequestBody OrderStatusDto status, @PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
-        if(orderService.isOrderBelongToUser(id, userId)) {
-            Optional<OrderResponseDto> optionalOrderDto = orderService.changeStatus(status, id);
-            if (optionalOrderDto.isPresent()) {
-                OrderResponseDto orderDto = optionalOrderDto.get();
-                if(orderDto.getStatus() == status) {
-                    return ResponseEntity.ok(new OrderStatusResponse("Successfully updated to " + status, null));
-                }
-                else {
-                    return ResponseEntity.badRequest().body(new OrderStatusResponse(null, "Can not change the status from " + orderDto.getStatus() + "to " + status));
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new OrderStatusResponse(null, "Order with id " + id + " not found"));
+
+        Optional<OrderResponseDto> optionalOrderDto = orderService.changeStatus(status.getStatus(), id);
+        if (optionalOrderDto.isPresent()) {
+            OrderResponseDto orderDto = optionalOrderDto.get();
+            if(orderDto.getStatus() == status.getStatus()) {
+                return ResponseEntity.ok(new OrderStatusResponse("Successfully updated to " + status.getStatus(), null));
             }
+            else {
+                return ResponseEntity.badRequest().body(new OrderStatusResponse(null, "Can not change the status from " + orderDto.getStatus() + "to " + status.getStatus()));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new OrderStatusResponse(null, "Order with id " + id + " not found"));
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        //FIXME- check if the seller owns the product
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/seller")
